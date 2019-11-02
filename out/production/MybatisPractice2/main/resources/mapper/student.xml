@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resources.mapper.student">
+    
+    <resultMap id="studentMap" type="main.java.entity.Student">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="address" column="address"/>
+        <result property="cid" column="cid"/>
+        
+        <association property="card" javaType="main.java.entity.Card">
+            <id property="cid" column="cid"/>
+            <result property="money" column="money"/>
+            <result property="count" column="count"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertStudent" parameterType="main.java.entity.Student">
+        insert into student(id,name, phone, address, cid) values (#{id}, #{name}, #{phone}, #{address}, #{cid})
+    </insert>
+
+    <delete id="deleteStudentById" parameterType="int">
+        delete from student where id = #{id}
+    </delete>
+
+    <select id="getStudentById" parameterType="int" resultType="main.java.entity.Student">
+        select * from student where id = #{id}
+    </select>
+
+    <select id="updatePhoneById" parameterType="main.java.entity.Student">
+        update student set phone = #{phone} where id = #{id}
+    </select>
+
+    <select id="getAllById" parameterType="int" resultMap="studentMap">
+        select * from student left join card on student.cid = card.cid where id = #{id}
+    </select>
+</mapper>
